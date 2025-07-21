@@ -18,45 +18,65 @@ export default [
     layout: false,
   },
   {
-    name: 'userIndex',
-    path: '/user',
-    component: './User',
+    name: 'forgotPassword',
+    path: '/user/forgot-password',
+    component: './User/ForgotPassword',
+    layout: false,
   },
-
   {
-    name: 'appIndex',
-    path: '/app',
-    component: './App',
-  },
-
-  {
-    name: 'resourceIndex',
-    path: '/resource',
-    component: './Resource',
-  },
-
-  {
-    name: 'permissionIndex',
-    path: '/permission',
-    component: './Permission',
-  },
-
-  {
-    name: 'roleIndex',
-    path: '/role',
-    component: './Role',
-  },
-
-  {
-    name: 'whileListIndex',
-    path: '/while_list',
-    component: './WhiteList',
+    name: 'profile',
+    path: '/user/profile',
+    component: './User/ProfilePage',
+    icon: 'user',
   },
   {
     path: '/welcome',
     name: 'welcome',
     icon: 'smile',
     component: './Welcome',
+  },
+  {
+    path: '/permission',
+    name: 'permission',
+    icon: 'safety',
+    routes: [
+      {
+        name: 'userManagement',
+        path: '/permission/user',
+        component: './User',
+        icon: 'user',
+      },
+      {
+        name: 'roleManagement',
+        path: '/permission/role',
+        component: './Role',
+        icon: 'team',
+      },
+      {
+        name: 'permissionManagement',
+        path: '/permission/permission',
+        component: './Permission',
+        icon: 'key',
+      },
+      {
+        name: 'resourceManagement',
+        path: '/permission/resource',
+        component: './Resource',
+        icon: 'database',
+      },
+      {
+        name: 'whiteListManagement',
+        path: '/permission/whitelist',
+        component: './WhiteList',
+        icon: 'safety-certificate',
+      },
+    ],
+  },
+  {
+    name: 'appManagement',
+    path: '/app',
+    component: './App',
+    icon: 'appstore',
   },
   {
     path: '/',

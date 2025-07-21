@@ -18,3 +18,14 @@ declare module 'react-fittext';
 declare module 'bizcharts-plugin-slider';
 declare const mqtt: any;
 declare const REACT_APP_ENV: 'test' | 'dev' | 'pre' | false;
+
+declare namespace USER {
+  type UserInfo = {
+    userId?: string;
+    userName?: string;
+    nickName?: string;
+    avatar?: string;
+    phone?: string;
+    email?: string;
+  };
+}

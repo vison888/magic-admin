@@ -76,9 +76,7 @@ const InfoCard: React.FC<{
       >
         {desc}
       </div>
-      <a href={href} target="_blank" rel="noreferrer">
-        了解更多 {'>'}
-      </a>
+      <a href={href}>立即使用 {'>'}</a>
     </div>
   );
 };
@@ -114,7 +112,7 @@ const Welcome: React.FC = () => {
               color: token.colorTextHeading,
             }}
           >
-            欢迎使用 Ant Design Pro
+            欢迎使用 Magic Admin 管理系统
           </div>
           <p
             style={{
@@ -126,8 +124,9 @@ const Welcome: React.FC = () => {
               width: '65%',
             }}
           >
-            Ant Design Pro 是一个整合了 umi，Ant Design 和 ProComponents
-            的脚手架方案。致力于在设计规范和基础组件的基础上，继续向上构建，提炼出典型模板/业务组件/配套设计资源，进一步提升企业级中后台产品设计研发过程中的『用户』和『设计者』的体验。
+            Magic Admin 是一个基于 Ant Design Pro 构建的企业级权限管理系统。
+            提供完整的用户管理、角色管理、权限配置、资源管理等功能，采用科技风格设计，
+            为管理员提供高效、安全、美观的管理体验。
           </p>
           <div
             style={{
@@ -138,21 +137,21 @@ const Welcome: React.FC = () => {
           >
             <InfoCard
               index={1}
-              href="https://umijs.org/docs/introduce/introduce"
-              title="了解 umi"
-              desc="umi 是一个可扩展的企业级前端应用框架,umi 以路由为基础的，同时支持配置式路由和约定式路由，保证路由的功能完备，并以此进行功能扩展。"
+              href="/permission/user"
+              title="用户管理"
+              desc="管理系统用户信息，包括用户的创建、编辑、删除和权限分配。支持批量操作和高级搜索功能。"
             />
             <InfoCard
               index={2}
-              title="了解 ant design"
-              href="https://ant.design"
-              desc="antd 是基于 Ant Design 设计体系的 React UI 组件库，主要用于研发企业级中后台产品。"
+              title="角色管理"
+              href="/permission/role"
+              desc="定义和管理系统角色，为不同角色分配相应的权限，实现细粒度的权限控制。"
             />
             <InfoCard
               index={3}
-              title="了解 Pro Components"
-              href="https://procomponents.ant.design"
-              desc="ProComponents 是一个基于 Ant Design 做了更高抽象的模板组件，以 一个组件就是一个页面为开发理念，为中后台开发带来更好的体验。"
+              title="权限配置"
+              href="/permission/permission"
+              desc="配置系统权限，包括API权限、菜单权限和规则权限，确保系统安全可控。"
             />
           </div>
         </div>

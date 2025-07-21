@@ -1,18 +1,22 @@
-import { Footer } from '@/components';
-import { authServiceLogin } from '@/services/auth/authService';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-components';
+import {
+  LoginForm,
+  ProFormCheckbox,
+  ProFormText,
+} from '@ant-design/pro-components';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
-import { history, useModel, Helmet } from '@umijs/max';
-import { Alert, message } from 'antd';
-import Settings from '../../../../config/defaultSettings';
+import { Helmet, history, useModel } from '@umijs/max';
+import { Alert, Modal, message } from 'antd';
 import React, { useState } from 'react';
 import { flushSync } from 'react-dom';
-
-import { isPassword, passwordFormatTips } from '@/utils/verification';
-import { setLoginResult } from '@/utils/store';
+import { Footer } from '@/components';
+import { authServiceLogin } from '@/services/auth/authService';
 import { APPCODE } from '@/utils/const';
 import { getPassword } from '@/utils/password';
+import { setLoginResult } from '@/utils/store';
+import { isPassword, passwordFormatTips } from '@/utils/verification';
+import Settings from '../../../../config/defaultSettings';
+import ForgotPasswordModal from '../ForgotPassword';
 
 const LoginMessage: React.FC<{
   content: string;
@@ -32,6 +36,7 @@ const LoginMessage: React.FC<{
 
 const Login: React.FC = () => {
   const [userLoginState, setUserLoginState] = useState<API.protoLoginResp>({});
+  const [forgotPasswordVisible, setForgotPasswordVisible] = useState(false);
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const containerClassName = useEmotionCss(() => {
@@ -129,7 +134,7 @@ const Login: React.FC = () => {
             minWidth: 350,
             maxWidth: '75vw',
           }}
-          title="用户登陆"
+          title="Magic Admin 管理系统"
           initialValues={{
             autoLogin: false,
           }}
@@ -155,7 +160,7 @@ const Login: React.FC = () => {
                   marginTop: loginCode !== 0 ? '0px' : '20px',
                 },
               }}
-              placeholder={'用户名'}
+              placeholder={'请输入用户名'}
               rules={[
                 {
                   required: true,
@@ -169,7 +174,7 @@ const Login: React.FC = () => {
                 size: 'large',
                 prefix: <LockOutlined />,
               }}
-              placeholder={'密码'}
+              placeholder={'请输入密码'}
               rules={[
                 {
                   required: true,
@@ -190,6 +195,9 @@ const Login: React.FC = () => {
               style={{
                 float: 'right',
               }}
+              onClick={() => {
+                setForgotPasswordVisible(true);
+              }}
             >
               忘记密码
             </a>
@@ -197,6 +205,13 @@ const Login: React.FC = () => {
         </LoginForm>
       </div>
       <Footer />
+      <ForgotPasswordModal
+        visible={forgotPasswordVisible}
+        onCancel={() => setForgotPasswordVisible(false)}
+        onSuccess={() => {
+          message.success('密码重置成功，请使用新密码登录');
+        }}
+      />
     </div>
   );
 };

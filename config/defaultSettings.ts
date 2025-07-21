@@ -1,4 +1,4 @@
-import { ProLayoutProps } from '@ant-design/pro-components';
+import type { ProLayoutProps } from '@ant-design/pro-components';
 
 /**
  * @name
@@ -15,7 +15,7 @@ const Settings: ProLayoutProps & {
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'IOT Engine',
+  title: 'Magic Admin 管理系统',
   pwa: true,
   logo: '/logo.jpg',
   iconfontUrl: '',

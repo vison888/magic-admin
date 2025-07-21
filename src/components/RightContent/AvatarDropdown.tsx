@@ -1,12 +1,17 @@
-import { authServiceLogout } from '@/services/auth/authService';
-import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  LogoutOutlined,
+  SettingOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
 import { history, useModel } from '@umijs/max';
 import { Spin } from 'antd';
 import { stringify } from 'querystring';
 import type { MenuInfo } from 'rc-menu/lib/interface';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { flushSync } from 'react-dom';
+import UserProfileDrawer from '@/pages/User/Profile';
+import { authServiceLogout } from '@/services/auth/authService';
 import HeaderDropdown from '../HeaderDropdown';
 
 export type GlobalHeaderRightProps = {
@@ -20,7 +25,12 @@ export const AvatarName = () => {
   return <span className="anticon">{currentUser?.nickName}</span>;
 };
 
-export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, children }) => {
+export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({
+  menu,
+  children,
+}) => {
+  const [profileVisible, setProfileVisible] = useState(false);
+
   /**
    * 退出登录，并且将当前的 url 保存
    */
@@ -67,6 +77,10 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
         loginOut();
         return;
       }
+      if (key === 'profile') {
+        setProfileVisible(true);
+        return;
+      }
       history.push(`/account/${key}`);
     },
     [setInitialState],
@@ -98,9 +112,9 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
     ...(menu
       ? [
           {
-            key: 'center',
+            key: 'profile',
             icon: <UserOutlined />,
-            label: '个人中心',
+            label: '个人信息',
           },
           {
             key: 'settings',
@@ -120,14 +134,20 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
   ];
 
   return (
-    <HeaderDropdown
-      menu={{
-        selectedKeys: [],
-        onClick: onMenuClick,
-        items: menuItems,
-      }}
-    >
-      {children}
-    </HeaderDropdown>
+    <>
+      <HeaderDropdown
+        menu={{
+          selectedKeys: [],
+          onClick: onMenuClick,
+          items: menuItems,
+        }}
+      >
+        {children}
+      </HeaderDropdown>
+      <UserProfileDrawer
+        visible={profileVisible}
+        onClose={() => setProfileVisible(false)}
+      />
+    </>
   );
 };
