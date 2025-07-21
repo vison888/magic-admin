@@ -17,6 +17,7 @@ import { setLoginResult } from '@/utils/store';
 import { isPassword, passwordFormatTips } from '@/utils/verification';
 import Settings from '../../../../config/defaultSettings';
 import ForgotPasswordModal from '../ForgotPassword';
+import './index.less';
 
 const LoginMessage: React.FC<{
   content: string;
@@ -35,21 +36,8 @@ const LoginMessage: React.FC<{
 };
 
 const Login: React.FC = () => {
-  const [userLoginState, setUserLoginState] = useState<API.protoLoginResp>({});
   const [forgotPasswordVisible, setForgotPasswordVisible] = useState(false);
   const { initialState, setInitialState } = useModel('@@initialState');
-
-  const containerClassName = useEmotionCss(() => {
-    return {
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100vh',
-      overflow: 'auto',
-      backgroundImage:
-        "url('https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/V-_oS6r-i7wAAAAAAAAAAAAAFl94AQBr')",
-      backgroundSize: '100% 100%',
-    };
-  });
 
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
@@ -81,84 +69,67 @@ const Login: React.FC = () => {
   };
 
   const handleSubmit = async (values: API.protoLoginReq) => {
-    try {
-      const account = values.account as string;
-      const password = values.password as string;
-      const passwordErr = checkPassword(password);
-      if (!passwordErr) {
-        message.error(passwordErr);
-        return;
-      }
+    const account = values.account as string;
+    const password = values.password as string;
+    const passwordErr = checkPassword(password);
+    if (!passwordErr) {
+      message.error(passwordErr);
+      return;
+    }
 
-      const accountErr = checkAccount(account);
-      if (!accountErr) {
-        message.error(accountErr);
-        return;
-      }
+    const accountErr = checkAccount(account);
+    if (!accountErr) {
+      message.error(accountErr);
+      return;
+    }
 
-      values.password = getPassword(values.password as string);
-      // 登录
-      const msg = await authServiceLogin({ ...values });
-      if (msg.code === 0) {
-        message.success('登录成功！');
-        //存储token信息
-        setLoginResult(msg.token as string, msg.user_id as string);
-        await fetchUserInfo();
-        const urlParams = new URL(window.location.href).searchParams;
+    values.password = getPassword(values.password as string);
+    // 登录
+    const msg = await authServiceLogin({ ...values });
+    if (msg.code === 0) {
+      message.success('登录成功！正在跳转...');
+      //存储token信息
+      setLoginResult(msg.token as string, msg.user_id as string);
+      await fetchUserInfo();
+      const urlParams = new URL(window.location.href).searchParams;
+      setTimeout(() => {
         history.push(urlParams.get('redirect') || '/');
-        return;
-      }
-      // 如果失败去设置用户错误信息
-      setUserLoginState(msg);
-    } catch (error) {
-      console.log('登陆失败', error);
+      }, 1000);
+      return;
     }
   };
 
-  const loginCode = userLoginState.code === undefined ? 0 : userLoginState.code;
   return (
-    <div className={containerClassName}>
+    <div className="login-container">
       <Helmet>
         <title>
           {'登录页'}- {Settings.title}
         </title>
       </Helmet>
-      <div
-        style={{
-          flex: '2',
-          padding: '200px 20px',
-        }}
-      >
-        <LoginForm
-          contentStyle={{
-            minWidth: 350,
-            maxWidth: '75vw',
-          }}
-          title="Magic Admin 管理系统"
-          initialValues={{
-            autoLogin: false,
-          }}
-          onFinish={async (values) => {
-            const req: API.protoLoginReq = {
-              account: values.username,
-              password: values.password,
-              role_code: 'MAGIC_PLAT_ADMIN',
-              app_code: APPCODE,
-            };
-            await handleSubmit(req);
-          }}
-        >
-          {loginCode !== 0 && <LoginMessage content={'账户或密码错误'} />}
 
-          <>
+      <div className="login-content">
+        <div className="login-form-wrapper">
+          <LoginForm
+            title="管理系统"
+            subTitle="Magic Admin - 企业级管理平台"
+            initialValues={{
+              autoLogin: false,
+            }}
+            onFinish={async (values) => {
+              const req: API.protoLoginReq = {
+                account: values.username,
+                password: values.password,
+                role_code: 'MAGIC_PLAT_ADMIN',
+                app_code: APPCODE,
+              };
+              await handleSubmit(req);
+            }}
+          >
             <ProFormText
               name="username"
               fieldProps={{
                 size: 'large',
-                prefix: <UserOutlined />,
-                style: {
-                  marginTop: loginCode !== 0 ? '0px' : '20px',
-                },
+                prefix: <UserOutlined style={{ color: '#bfbfbf' }} />,
               }}
               placeholder={'请输入用户名'}
               rules={[
@@ -172,7 +143,7 @@ const Login: React.FC = () => {
               name="password"
               fieldProps={{
                 size: 'large',
-                prefix: <LockOutlined />,
+                prefix: <LockOutlined style={{ color: '#bfbfbf' }} />,
               }}
               placeholder={'请输入密码'}
               rules={[
@@ -182,28 +153,34 @@ const Login: React.FC = () => {
                 },
               ]}
             />
-          </>
-          <div
-            style={{
-              marginBottom: 24,
-            }}
-          >
-            <ProFormCheckbox noStyle name="autoLogin">
-              自动登录
-            </ProFormCheckbox>
-            <a
+
+            <div
               style={{
-                float: 'right',
-              }}
-              onClick={() => {
-                setForgotPasswordVisible(true);
+                marginBottom: 24,
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}
             >
-              忘记密码
-            </a>
-          </div>
-        </LoginForm>
+              <ProFormCheckbox noStyle name="autoLogin">
+                自动登录
+              </ProFormCheckbox>
+              <a
+                style={{
+                  color: '#1890ff',
+                  textDecoration: 'none',
+                }}
+                onClick={() => {
+                  setForgotPasswordVisible(true);
+                }}
+              >
+                忘记密码
+              </a>
+            </div>
+          </LoginForm>
+        </div>
       </div>
+
       <Footer />
       <ForgotPasswordModal
         visible={forgotPasswordVisible}

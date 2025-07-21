@@ -39,6 +39,7 @@
     "@ant-design/pro-components": "^2.7.19",
     "@ant-design/use-emotion-css": "^1.0.4",
     "@ant-design/v5-patch-for-react-19": "^1.0.3",
+    "@types/react-syntax-highlighter": "^15.5.13",
     "antd": "^5.25.4",
     "antd-style": "^3.7.0",
     "classnames": "^2.5.1",
@@ -48,6 +49,7 @@
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^19.1.0",
     "react-json-view": "^1.21.3",
+    "react-syntax-highlighter": "^15.6.1",
     "yarm": "^0.4.0"
   },
   "devDependencies": {

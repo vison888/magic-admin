@@ -1,23 +1,20 @@
-import {
-  CloseOutlined,
-  EditOutlined,
-  SaveOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { CloseOutlined, SaveOutlined, UserOutlined } from '@ant-design/icons';
 import { useModel } from '@umijs/max';
 import {
   Avatar,
   Button,
+  Card,
   Descriptions,
-  Drawer,
   Form,
   Input,
   message,
-  Upload,
+  Typography,
 } from 'antd';
 import React, { useState } from 'react';
 import { userServiceUpdate } from '@/services/auth/userService';
 import { APPCODE } from '@/utils/const';
+
+const { Title, Text } = Typography;
 
 interface UserProfileDrawerProps {
   visible: boolean;
@@ -29,20 +26,21 @@ const UserProfileDrawer: React.FC<UserProfileDrawerProps> = ({
   onClose,
 }) => {
   const { initialState, setInitialState } = useModel('@@initialState');
-  const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
   const currentUser = initialState?.currentUser;
 
-  const handleEdit = () => {
-    setEditing(true);
-    form.setFieldsValue({
-      nickName: currentUser?.nickName,
-      phone: currentUser?.phone,
-      email: currentUser?.email,
-    });
-  };
+  // 初始化表单数据
+  React.useEffect(() => {
+    if (visible && currentUser) {
+      form.setFieldsValue({
+        nickName: currentUser?.nickName,
+        phone: currentUser?.phone,
+        email: currentUser?.email,
+      });
+    }
+  }, [visible, currentUser, form]);
 
   const handleSave = async () => {
     try {
@@ -61,7 +59,6 @@ const UserProfileDrawer: React.FC<UserProfileDrawerProps> = ({
 
       if (response.code === 0) {
         message.success('个人信息更新成功');
-        setEditing(false);
 
         // 更新全局状态
         if (setInitialState) {
@@ -85,79 +82,80 @@ const UserProfileDrawer: React.FC<UserProfileDrawerProps> = ({
     }
   };
 
-  const handleCancel = () => {
-    setEditing(false);
-    form.resetFields();
-  };
-
   return (
-    <Drawer
-      title="个人信息"
-      placement="right"
-      width={500}
-      open={visible}
-      onClose={onClose}
-      styles={{
-        mask: {
-          backgroundColor: 'rgba(0, 0, 0, 0.45)',
-        },
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        right: 0,
+        width: '480px',
+        height: '100vh',
+        backgroundColor: '#fff',
+        boxShadow: '-2px 0 8px rgba(0, 0, 0, 0.15)',
+        zIndex: 1000,
+        transform: visible ? 'translateX(0)' : 'translateX(100%)',
+        transition: 'transform 0.3s ease',
+        overflowY: 'auto',
       }}
-      extra={
-        <div style={{ display: 'flex', gap: '8px' }}>
-          {!editing ? (
-            <Button type="primary" icon={<EditOutlined />} onClick={handleEdit}>
-              编辑
-            </Button>
-          ) : (
-            <>
-              <Button
-                type="primary"
-                icon={<SaveOutlined />}
-                loading={loading}
-                onClick={handleSave}
-              >
-                保存
-              </Button>
-              <Button icon={<CloseOutlined />} onClick={handleCancel}>
-                取消
-              </Button>
-            </>
-          )}
-        </div>
-      }
     >
-      <div style={{ padding: '20px 0' }}>
-        {/* 头像区域 */}
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <Avatar size={80} src={currentUser?.avatar} icon={<UserOutlined />} />
-          <div style={{ marginTop: '16px', fontSize: '18px', fontWeight: 600 }}>
-            {currentUser?.nickName || currentUser?.userName}
-          </div>
+      {/* 头部 */}
+      <div
+        style={{
+          padding: '24px 24px 0 24px',
+          borderBottom: '1px solid #f0f0f0',
+          marginBottom: '24px',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Title level={4} style={{ margin: 0 }}>
+            个人信息
+          </Title>
+          <Button type="text" icon={<CloseOutlined />} onClick={onClose} />
         </div>
+      </div>
 
-        {!editing ? (
-          // 查看模式
-          <Descriptions column={1} bordered size="small">
+      <div style={{ padding: '0 24px 24px 24px' }}>
+        {/* 头像和基本信息 */}
+        <Card style={{ marginBottom: '24px' }} bodyStyle={{ padding: '24px' }}>
+          <div style={{ textAlign: 'center' }}>
+            <Avatar
+              size={80}
+              src={currentUser?.avatar}
+              icon={<UserOutlined />}
+              style={{ marginBottom: '16px' }}
+            />
+            <Title level={4} style={{ margin: '0 0 8px 0' }}>
+              {currentUser?.nickName || currentUser?.userName}
+            </Title>
+            <Text type="secondary">{currentUser?.userName}</Text>
+          </div>
+        </Card>
+
+        {/* 详细信息 */}
+        <Card title="详细信息">
+          <Descriptions
+            column={1}
+            size="small"
+            style={{ marginBottom: '24px' }}
+          >
             <Descriptions.Item label="用户ID">
-              {currentUser?.userId}
+              <Text copyable>{currentUser?.userId}</Text>
             </Descriptions.Item>
             <Descriptions.Item label="用户名">
               {currentUser?.userName}
             </Descriptions.Item>
-            <Descriptions.Item label="昵称">
-              {currentUser?.nickName || '-'}
+            <Descriptions.Item label="角色">
+              <Text type="success">管理员</Text>
             </Descriptions.Item>
-            <Descriptions.Item label="手机号">
-              {currentUser?.phone || '-'}
-            </Descriptions.Item>
-            <Descriptions.Item label="邮箱">
-              {currentUser?.email || '-'}
-            </Descriptions.Item>
-            <Descriptions.Item label="角色">管理员</Descriptions.Item>
           </Descriptions>
-        ) : (
-          // 编辑模式
-          <Form form={form} layout="vertical" style={{ marginTop: '24px' }}>
+
+          <Form form={form} layout="vertical">
             <Form.Item
               label="昵称"
               name="nickName"
@@ -183,10 +181,23 @@ const UserProfileDrawer: React.FC<UserProfileDrawerProps> = ({
             >
               <Input placeholder="请输入邮箱" />
             </Form.Item>
+
+            <Form.Item style={{ marginBottom: 0, marginTop: '24px' }}>
+              <Button
+                type="primary"
+                icon={<SaveOutlined />}
+                loading={loading}
+                onClick={handleSave}
+                block
+                size="large"
+              >
+                保存修改
+              </Button>
+            </Form.Item>
           </Form>
-        )}
+        </Card>
       </div>
-    </Drawer>
+    </div>
   );
 };
 

@@ -1,18 +1,21 @@
-import useTableAdd from '@/hooks/useTableAdd';
-import useTableUpdate from '@/hooks/useTableUpdate';
-import { permissionServiceAdd, permissionServiceUpdate } from '@/services/auth/permissionService';
-import { resourceServicePage } from '@/services/auth/resourceService';
-import { RESOURCE_TYPE_RULE } from '@/utils/const';
 import {
-  ProFormSelect,
-  ProFormInstance,
+  type ActionType,
   ModalForm,
-  ProColumns,
+  type ProColumns,
+  type ProFormInstance,
+  ProFormSelect,
   ProTable,
-  ActionType,
 } from '@ant-design/pro-components';
 import { Button } from 'antd';
 import { useEffect, useRef, useState } from 'react';
+import useTableAdd from '@/hooks/useTableAdd';
+import useTableUpdate from '@/hooks/useTableUpdate';
+import {
+  permissionServiceAdd,
+  permissionServiceUpdate,
+} from '@/services/auth/permissionService';
+import { resourceServicePage } from '@/services/auth/resourceService';
+import { RESOURCE_TYPE_RULE } from '@/utils/const';
 
 const FORMITEM_LAYOUT = {
   labelCol: { span: 4 },
@@ -35,8 +38,8 @@ const AddOrUpdateRulePermission: React.FC<{
   const { updateHandler } = useTableUpdate();
   const [editFlag, setEditFlag] = useState(false);
   const [visible, setVisible] = useState(false);
-  const editFormRef = useRef<ProFormInstance>();
-  const subPageActionRef = useRef<ActionType>();
+  const editFormRef = useRef<ProFormInstance>(null);
+  const subPageActionRef = useRef<ActionType>(null);
   const selectedList = useRef<string[]>([]);
   const onOpen = () => setVisible(true);
   const onClose = () => setVisible(false);
@@ -55,11 +58,10 @@ const AddOrUpdateRulePermission: React.FC<{
         app_id: values.app_id,
         resources: resourceStr,
       };
-      const res = await updateHandler<UpdateFuncType, API.protoPermissionUpdateReq>(
-        permissionServiceUpdate,
-        pageRef,
-        updateReq,
-      );
+      const res = await updateHandler<
+        UpdateFuncType,
+        API.protoPermissionUpdateReq
+      >(permissionServiceUpdate, pageRef, updateReq);
       code = res.code;
     } else {
       const addReq: API.protoPermissionAddReq = {

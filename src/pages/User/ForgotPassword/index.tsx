@@ -1,5 +1,5 @@
-import { LockOutlined, MailOutlined, SafetyOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Modal, message, Steps } from 'antd';
+import { LockOutlined, MailOutlined } from '@ant-design/icons';
+import { Button, Form, Input, Modal, message } from 'antd';
 import React, { useState } from 'react';
 import {
   authServiceForgetPassword,
@@ -19,50 +19,48 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
   onCancel,
   onSuccess,
 }) => {
-  const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [sendingCode, setSendingCode] = useState(false);
   const [form] = Form.useForm();
 
-  const steps = [
-    {
-      title: '邮箱验证',
-      icon: <MailOutlined />,
-    },
-    {
-      title: '验证码',
-      icon: <SafetyOutlined />,
-    },
-    {
-      title: '重置密码',
-      icon: <LockOutlined />,
-    },
-  ];
+  // 验证手机号或邮箱格式
+  const validateContact = (_: any, value: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^1[3-9]\d{9}$/;
+
+    if (emailRegex.test(value)) {
+      return Promise.resolve();
+    }
+    if (phoneRegex.test(value)) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error('请输入有效的手机号或邮箱地址'));
+  };
 
   const handleSendVerificationCode = async () => {
     try {
-      const email = form.getFieldValue('email');
-      if (!email) {
-        message.error('请先输入邮箱地址');
+      const contact = form.getFieldValue('email');
+      if (!contact) {
+        message.error('请先输入手机号或邮箱地址');
         return;
       }
 
-      setLoading(true);
+      setSendingCode(true);
       const response = await authServiceVerificationCode({
-        object: email,
+        object: contact,
         method: 2, // 邮箱验证
         app_code: APPCODE,
       });
 
       if (response.code === 0) {
-        message.success('验证码已发送到您的邮箱');
-        setCurrentStep(1);
+        message.success('验证码已发送');
       } else {
         message.error(response.msg || '发送验证码失败');
       }
     } catch (error) {
       message.error('发送验证码失败，请重试');
     } finally {
-      setLoading(false);
+      setSendingCode(false);
     }
   };
 
@@ -93,151 +91,9 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
 
   const handleCancel = () => {
     form.resetFields();
-    setCurrentStep(0);
     setLoading(false);
+    setSendingCode(false);
     onCancel();
-  };
-
-  const renderStepContent = () => {
-    switch (currentStep) {
-      case 0:
-        return (
-          <Form.Item
-            name="email"
-            rules={[
-              { required: true, message: '请输入邮箱地址' },
-              { type: 'email', message: '请输入有效的邮箱地址' },
-            ]}
-          >
-            <Input
-              size="large"
-              prefix={<MailOutlined style={{ color: '#36CFC9' }} />}
-              placeholder="请输入邮箱地址"
-            />
-          </Form.Item>
-        );
-      case 1:
-        return (
-          <Form.Item
-            name="verificationCode"
-            rules={[{ required: true, message: '请输入验证码' }]}
-          >
-            <Input
-              size="large"
-              prefix={<SafetyOutlined style={{ color: '#36CFC9' }} />}
-              placeholder="请输入验证码"
-              maxLength={6}
-            />
-          </Form.Item>
-        );
-      case 2:
-        return (
-          <>
-            <Form.Item
-              name="newPassword"
-              rules={[
-                { required: true, message: '请输入新密码' },
-                { min: 6, message: '密码长度至少6位' },
-              ]}
-            >
-              <Input.Password
-                size="large"
-                prefix={<LockOutlined style={{ color: '#36CFC9' }} />}
-                placeholder="请输入新密码"
-              />
-            </Form.Item>
-            <Form.Item
-              name="confirmPassword"
-              dependencies={['newPassword']}
-              rules={[
-                { required: true, message: '请确认新密码' },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue('newPassword') === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(new Error('两次输入的密码不一致'));
-                  },
-                }),
-              ]}
-            >
-              <Input.Password
-                size="large"
-                prefix={<LockOutlined style={{ color: '#36CFC9' }} />}
-                placeholder="请确认新密码"
-              />
-            </Form.Item>
-          </>
-        );
-      default:
-        return null;
-    }
-  };
-
-  const getStepActions = () => {
-    switch (currentStep) {
-      case 0:
-        return (
-          <Button
-            type="primary"
-            size="large"
-            loading={loading}
-            onClick={handleSendVerificationCode}
-            style={{
-              background: 'linear-gradient(135deg, #1890FF 0%, #00E5FF 100%)',
-              border: 'none',
-              borderRadius: '8px',
-              height: '48px',
-              fontSize: '16px',
-              fontWeight: 600,
-              boxShadow: '0 4px 12px rgba(24, 144, 255, 0.3)',
-            }}
-          >
-            发送验证码
-          </Button>
-        );
-      case 1:
-        return (
-          <Button
-            type="primary"
-            size="large"
-            onClick={() => setCurrentStep(2)}
-            style={{
-              background: 'linear-gradient(135deg, #1890FF 0%, #00E5FF 100%)',
-              border: 'none',
-              borderRadius: '8px',
-              height: '48px',
-              fontSize: '16px',
-              fontWeight: 600,
-              boxShadow: '0 4px 12px rgba(24, 144, 255, 0.3)',
-            }}
-          >
-            下一步
-          </Button>
-        );
-      case 2:
-        return (
-          <Button
-            type="primary"
-            size="large"
-            loading={loading}
-            onClick={handleResetPassword}
-            style={{
-              background: 'linear-gradient(135deg, #1890FF 0%, #00E5FF 100%)',
-              border: 'none',
-              borderRadius: '8px',
-              height: '48px',
-              fontSize: '16px',
-              fontWeight: 600,
-              boxShadow: '0 4px 12px rgba(24, 144, 255, 0.3)',
-            }}
-          >
-            重置密码
-          </Button>
-        );
-      default:
-        return null;
-    }
   };
 
   return (
@@ -246,37 +102,98 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
       open={visible}
       onCancel={handleCancel}
       footer={null}
-      width={500}
+      width={400}
       centered
-      styles={{
-        header: {
-          background: 'linear-gradient(135deg, #0F1423 0%, #1A1F2D 100%)',
-          borderBottom: '1px solid rgba(56, 207, 201, 0.3)',
-        },
-        body: {
-          background: 'rgba(26, 31, 45, 0.9)',
-          backdropFilter: 'blur(20px)',
-        },
-        mask: {
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        },
-      }}
     >
-      <div style={{ padding: '20px 0' }}>
-        <Steps
-          current={currentStep}
-          items={steps}
-          style={{ marginBottom: '32px' }}
-        />
+      <Form form={form} layout="vertical" style={{ marginTop: '16px' }}>
+        <Form.Item
+          name="email"
+          label="手机号或邮箱"
+          rules={[
+            { required: true, message: '请输入手机号或邮箱地址' },
+            { validator: validateContact },
+          ]}
+        >
+          <Input
+            size="large"
+            prefix={<MailOutlined />}
+            placeholder="请输入手机号或邮箱地址"
+          />
+        </Form.Item>
 
-        <Form form={form} layout="vertical" style={{ marginTop: '24px' }}>
-          {renderStepContent()}
-
-          <div style={{ textAlign: 'center', marginTop: '32px' }}>
-            {getStepActions()}
+        <Form.Item
+          name="verificationCode"
+          label="验证码"
+          rules={[{ required: true, message: '请输入验证码' }]}
+        >
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <Input
+              size="large"
+              placeholder="请输入验证码"
+              maxLength={6}
+              style={{ flex: 1 }}
+            />
+            <Button
+              size="large"
+              onClick={handleSendVerificationCode}
+              loading={sendingCode}
+              disabled={sendingCode}
+            >
+              获取验证码
+            </Button>
           </div>
-        </Form>
-      </div>
+        </Form.Item>
+
+        <Form.Item
+          name="newPassword"
+          label="新密码"
+          rules={[
+            { required: true, message: '请输入新密码' },
+            { min: 6, message: '密码长度至少6位' },
+          ]}
+        >
+          <Input.Password
+            size="large"
+            prefix={<LockOutlined />}
+            placeholder="请输入新密码"
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="confirmPassword"
+          label="确认密码"
+          dependencies={['newPassword']}
+          rules={[
+            { required: true, message: '请确认新密码' },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('newPassword') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('两次输入的密码不一致'));
+              },
+            }),
+          ]}
+        >
+          <Input.Password
+            size="large"
+            prefix={<LockOutlined />}
+            placeholder="请确认新密码"
+          />
+        </Form.Item>
+
+        <Form.Item style={{ marginBottom: 0, textAlign: 'center' }}>
+          <Button
+            type="primary"
+            size="large"
+            loading={loading}
+            onClick={handleResetPassword}
+            style={{ width: '100%' }}
+          >
+            重置密码
+          </Button>
+        </Form.Item>
+      </Form>
     </Modal>
   );
 };

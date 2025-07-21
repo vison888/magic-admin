@@ -17,7 +17,7 @@ const Settings: ProLayoutProps & {
   colorWeak: false,
   title: 'Magic Admin 管理系统',
   pwa: true,
-  logo: '/logo.jpg',
+  logo: '/logo-tech.svg',
   iconfontUrl: '',
   token: {
     // 参见ts声明，demo 见文档，通过token 修改样式

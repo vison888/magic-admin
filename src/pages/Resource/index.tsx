@@ -2,16 +2,19 @@ import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { Button } from 'antd';
 import React, { useRef } from 'react';
-import { resourceServiceDel, resourceServicePage } from '@/services/auth/resourceService';
-import AddOrUpdateApiResource from './components/AddOrUpdateApiResource';
 import useTableDelete from '@/hooks/useTableDelete';
-import { timestampToDateStr } from '@/utils/date';
+import {
+  resourceServiceDel,
+  resourceServicePage,
+} from '@/services/auth/resourceService';
 import {
   RESOURCE_TYPE_API,
   RESOURCE_TYPE_MENU,
   RESOURCE_TYPE_RULE,
   RESOURCE_TYPE_VALUE,
 } from '@/utils/const';
+import { timestampToDateStr } from '@/utils/date';
+import AddOrUpdateApiResource from './components/AddOrUpdateApiResource';
 import AddOrUpdateMenuResource from './components/AddOrUpdateMenuResource';
 import AddOrUpdateRuleResource from './components/AddOrUpdateRuleResource';
 
@@ -20,7 +23,7 @@ const Page: React.FC = () => {
   const pageRef = useRef<ActionType>();
   // 删除操作
   const showDeleteConfirm = (record: API.protoResource) => {
-    const body: API.protoResource = {
+    const body: API.protoRequest = {
       id: record.id ?? '',
     };
     deleteHandler<API.protoRequest>(resourceServiceDel, pageRef, {
@@ -71,14 +74,12 @@ const Page: React.FC = () => {
       render: (_, entity: API.protoResource) => {
         if (entity.type === 'menu') {
           return (
-            <>
-              <AddOrUpdateMenuResource
-                flag="detail"
-                key={entity.id}
-                record={entity}
-                pageRef={pageRef}
-              />
-            </>
+            <AddOrUpdateMenuResource
+              flag="detail"
+              key={entity.id}
+              record={entity}
+              pageRef={pageRef}
+            />
           );
         }
         return entity.content;
@@ -89,7 +90,10 @@ const Page: React.FC = () => {
       dataIndex: 'create_time',
       valueType: 'dateTime',
       render: (_, entity: API.protoResource) =>
-        timestampToDateStr(Number(entity.create_time), 'YYYY-MM-DD HH:mm:ss.SSS'),
+        timestampToDateStr(
+          Number(entity.create_time),
+          'YYYY-MM-DD HH:mm:ss.SSS',
+        ),
       search: false,
     },
     {
@@ -163,9 +167,24 @@ const Page: React.FC = () => {
         dateFormatter="string"
         toolBarRender={() => [
           <>
-            <AddOrUpdateApiResource flag="create" pageRef={pageRef} key="createResource" />,
-            <AddOrUpdateMenuResource flag="create" pageRef={pageRef} key="createResource" />,
-            <AddOrUpdateRuleResource flag="create" pageRef={pageRef} key="createResource" />,
+            <AddOrUpdateApiResource
+              flag="create"
+              pageRef={pageRef}
+              key="createResource"
+            />
+            ,
+            <AddOrUpdateMenuResource
+              flag="create"
+              pageRef={pageRef}
+              key="createResource"
+            />
+            ,
+            <AddOrUpdateRuleResource
+              flag="create"
+              pageRef={pageRef}
+              key="createResource"
+            />
+            ,
           </>,
         ]}
       />

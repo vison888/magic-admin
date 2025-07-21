@@ -1,8 +1,12 @@
+// React 19 兼容性补丁 - 必须在其他导入之前
+import '@ant-design/v5-patch-for-react-19';
+
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { SettingDrawer } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from '@umijs/max';
 import { history } from '@umijs/max';
 import type { MenuDataItem } from '@umijs/route-utils';
+import { Modal } from 'antd';
 import React from 'react';
 import { AvatarDropdown, AvatarName, Footer } from '@/components';
 import { permissionServiceGetMenu } from '@/services/auth/permissionService';
@@ -12,6 +16,11 @@ import fixMenuItemIcon from '@/utils/icon';
 import { getToken, getUserId } from '@/utils/store';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
+
+// 配置Modal全局设置
+Modal.config({
+  rootPrefixCls: 'ant',
+});
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -84,9 +93,9 @@ export async function getInitialState(): Promise<{
   // 其他页面需要验证用户登录状态
   const currentUser = await fetchUserInfo();
 
-  // 如果用户信息获取成功，直接跳转到主界面
+  // 如果用户信息获取成功，直接跳转到用户管理页面
   if (currentUser && location.pathname === '/') {
-    history.push('/welcome');
+    history.push('/system/user');
   }
 
   return {
@@ -113,75 +122,90 @@ export const layout: RunTimeLayoutConfig = ({
       content: initialState?.currentUser?.nickName,
     },
     footerRender: () => <Footer />,
-    menu: {
-      request: async () => {
-        try {
-          const msg = await permissionServiceGetMenu({
-            app_code: APPCODE,
-          });
+    // menu: {
+    //   request: async () => {
+    //     try {
+    //       const msg = await permissionServiceGetMenu({
+    //         app_code: APPCODE,
+    //       });
 
-          if (msg.code === 0 && msg.menu) {
-            let menuData: MenuDataItem[] = JSON.parse(
-              msg.menu as string,
-            ) as MenuDataItem[];
-            menuData = menuData.map((item: MenuDataItem) => {
-              item.icon = fixMenuItemIcon(item.icon);
-              return item;
-            });
-            return menuData;
-          }
+    //       if (msg.code === 0 && msg.menu) {
+    //         let menuData: MenuDataItem[] = JSON.parse(
+    //           msg.menu as string,
+    //         ) as MenuDataItem[];
+    //         menuData = menuData.map((item: MenuDataItem) => {
+    //           item.icon = fixMenuItemIcon(item.icon);
+    //           return item;
+    //         });
+    //         return menuData;
+    //       }
 
-          // 如果API失败，返回默认菜单
-          return [
-            {
-              path: '/welcome',
-              name: 'welcome',
-              icon: 'smile',
-            },
-            {
-              path: '/permission',
-              name: 'permission',
-              icon: 'safety',
-              children: [
-                {
-                  path: '/permission/user',
-                  name: 'userManagement',
-                  icon: 'user',
-                },
-                {
-                  path: '/permission/role',
-                  name: 'roleManagement',
-                  icon: 'team',
-                },
-                {
-                  path: '/permission/permission',
-                  name: 'permissionManagement',
-                  icon: 'key',
-                },
-                {
-                  path: '/permission/resource',
-                  name: 'resourceManagement',
-                  icon: 'database',
-                },
-                {
-                  path: '/permission/whitelist',
-                  name: 'whiteListManagement',
-                  icon: 'safety-certificate',
-                },
-              ],
-            },
-            {
-              path: '/app',
-              name: 'appManagement',
-              icon: 'appstore',
-            },
-          ];
-        } catch (error) {
-          console.error('获取菜单失败:', error);
-          return [];
-        }
-      },
-    },
+    //       // 如果API失败，返回默认菜单
+    //       const defaultMenu = [
+    //         {
+    //           path: '/welcome',
+    //           name: '欢迎',
+    //           icon: 'smile',
+    //         },
+    //         {
+    //           path: '/system',
+    //           name: '系统管理',
+    //           icon: 'setting',
+    //           children: [
+    //             {
+    //               path: '/system/user',
+    //               name: '用户管理',
+    //               icon: 'user',
+    //             },
+    //             {
+    //               path: '/system/role',
+    //               name: '角色管理',
+    //               icon: 'team',
+    //             },
+    //             {
+    //               path: '/system/permission',
+    //               name: '权限管理',
+    //               icon: 'key',
+    //             },
+    //             {
+    //               path: '/system/resource',
+    //               name: '资源管理',
+    //               icon: 'database',
+    //             },
+    //             {
+    //               path: '/system/app',
+    //               name: '应用管理',
+    //               icon: 'appstore',
+    //             },
+    //             {
+    //               path: '/system/whitelist',
+    //               name: '白名单管理',
+    //               icon: 'safety-certificate',
+    //             },
+    //           ],
+    //         },
+    //       ];
+
+    //       // 处理默认菜单的图标
+    //       const processMenuIcons = (menuItems: MenuDataItem[]): MenuDataItem[] => {
+    //         return menuItems.map((item) => {
+    //           if (item.icon) {
+    //             item.icon = fixMenuItemIcon(item.icon);
+    //           }
+    //           if (item.children) {
+    //             item.children = processMenuIcons(item.children);
+    //           }
+    //           return item;
+    //         });
+    //       };
+
+    //       return processMenuIcons(defaultMenu);
+    //     } catch (error) {
+    //       console.error('获取菜单失败:', error);
+    //       return [];
+    //     }
+    //   },
+    // },
     onPageChange: () => {
       const { location } = history;
       // 如果没有登录，重定向到 login
@@ -221,6 +245,4 @@ export const layout: RunTimeLayoutConfig = ({
  * 它基于 axios 和 ahooks 的 useRequest 提供了一套统一的网络请求和错误处理方案。
  * @doc https://umijs.org/docs/max/request#配置
  */
-export const request: any = {
-  ...errorConfig,
-};
+export const request = errorConfig;

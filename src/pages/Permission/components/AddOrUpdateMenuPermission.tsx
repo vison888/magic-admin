@@ -1,18 +1,21 @@
-import useTableAdd from '@/hooks/useTableAdd';
-import useTableUpdate from '@/hooks/useTableUpdate';
-import { permissionServiceAdd, permissionServiceUpdate } from '@/services/auth/permissionService';
-import { resourceServicePage } from '@/services/auth/resourceService';
-import { RESOURCE_TYPE_MENU } from '@/utils/const';
 import {
-  ProFormSelect,
-  ProFormInstance,
+  type ActionType,
   ModalForm,
-  ProColumns,
+  type ProColumns,
+  type ProFormInstance,
+  ProFormSelect,
   ProTable,
-  ActionType,
 } from '@ant-design/pro-components';
 import { Button } from 'antd';
 import { useEffect, useRef, useState } from 'react';
+import useTableAdd from '@/hooks/useTableAdd';
+import useTableUpdate from '@/hooks/useTableUpdate';
+import {
+  permissionServiceAdd,
+  permissionServiceUpdate,
+} from '@/services/auth/permissionService';
+import { resourceServicePage } from '@/services/auth/resourceService';
+import { RESOURCE_TYPE_MENU } from '@/utils/const';
 import ShowJson from './ShowJson';
 
 const FORMITEM_LAYOUT = {
@@ -36,8 +39,8 @@ const AddOrUpdateMenuPermission: React.FC<{
   const { updateHandler } = useTableUpdate();
   const [editFlag, setEditFlag] = useState(false);
   const [visible, setVisible] = useState(false);
-  const editFormRef = useRef<ProFormInstance>();
-  const subPageActionRef = useRef<ActionType>();
+  const editFormRef = useRef<ProFormInstance>(null);
+  const subPageActionRef = useRef<ActionType>(null);
   const selectedList = useRef<string[]>([]);
   const onOpen = () => setVisible(true);
   const onClose = () => setVisible(false);
@@ -56,11 +59,10 @@ const AddOrUpdateMenuPermission: React.FC<{
         app_id: values.app_id,
         resources: resourceStr,
       };
-      const res = await updateHandler<UpdateFuncType, API.protoPermissionUpdateReq>(
-        permissionServiceUpdate,
-        pageRef,
-        updateReq,
-      );
+      const res = await updateHandler<
+        UpdateFuncType,
+        API.protoPermissionUpdateReq
+      >(permissionServiceUpdate, pageRef, updateReq);
       code = res.code;
     } else {
       const addReq: API.protoPermissionAddReq = {
@@ -127,9 +129,10 @@ const AddOrUpdateMenuPermission: React.FC<{
       dataIndex: 'content',
       render: (_, entity: API.protoResource) => {
         return (
-          <>
-            <ShowJson key={entity.id} info={{ name: entity.name, content: entity.content }} />
-          </>
+          <ShowJson
+            key={entity.id}
+            info={{ name: entity.name, content: entity.content }}
+          />
         );
       },
     },

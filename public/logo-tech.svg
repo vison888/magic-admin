@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200" version="1.1" viewBox="0 0 200 200">
+  <title>Magic Admin Tech Logo</title>
+  <desc>Tech-style logo for Magic Admin system</desc>
+  
+  <defs>
+    <!-- 主科技蓝渐变 -->
+    <linearGradient id="techGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1890FF"/>
+      <stop offset="100%" stop-color="#00E5FF"/>
+    </linearGradient>
+    
+    <!-- 深蓝渐变 -->
+    <linearGradient id="techGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#096DD9"/>
+      <stop offset="50%" stop-color="#1890FF"/>
+      <stop offset="100%" stop-color="#00E5FF"/>
+    </linearGradient>
+    
+    <!-- 霓虹蓝渐变 -->
+    <linearGradient id="techGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#36CFC9"/>
+      <stop offset="100%" stop-color="#00E5FF"/>
+    </linearGradient>
+    
+    <!-- 科技紫渐变 -->
+    <linearGradient id="techGradient4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#722ED1"/>
+      <stop offset="100%" stop-color="#1890FF"/>
+    </linearGradient>
+    
+    <!-- 发光效果 -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <g fill="none" fill-rule="evenodd" stroke="none" stroke-width="1">
+    <!-- 背景圆形 -->
+    <circle cx="100" cy="100" r="95" fill="url(#techGradient1)" opacity="0.1"/>
+    
+    <!-- 外圈装饰环 -->
+    <circle cx="100" cy="100" r="90" fill="none" stroke="url(#techGradient1)" stroke-width="2" opacity="0.3"/>
+    <circle cx="100" cy="100" r="80" fill="none" stroke="url(#techGradient2)" stroke-width="1" opacity="0.2"/>
+    
+    <!-- 中心六边形主体 -->
+    <polygon points="100,30 140,50 140,90 100,110 60,90 60,50" 
+             fill="url(#techGradient1)" 
+             filter="url(#glow)"/>
+    
+    <!-- 内部六边形 -->
+    <polygon points="100,45 125,60 125,85 100,100 75,85 75,60" 
+             fill="url(#techGradient2)" 
+             opacity="0.8"/>
+    
+    <!-- MA字母组合 -->
+    <g fill="white" font-family="Arial, sans-serif" font-weight="bold" font-size="28">
+      <!-- M字母 -->
+      <path d="M80,55 L80,85 L87,70 L94,85 L100,70 L106,85 L113,70 L120,85 L120,55 L113,55 L113,75 L106,60 L100,75 L94,60 L87,75 L87,55 Z"/>
+      
+      <!-- A字母 -->
+      <path d="M130,85 L140,55 L150,85 L145,85 L143,78 L137,78 L135,85 Z M138,75 L140,68 L142,75 Z"/>
+    </g>
+    
+    <!-- 科技装饰线条 -->
+    <g stroke="url(#techGradient3)" stroke-width="2" opacity="0.7">
+      <line x1="20" y1="100" x2="40" y2="100"/>
+      <line x1="160" y1="100" x2="180" y2="100"/>
+      <line x1="100" y1="20" x2="100" y2="40"/>
+      <line x1="100" y1="160" x2="100" y2="180"/>
+    </g>
+    
+    <!-- 装饰点 -->
+    <circle cx="40" cy="100" r="3" fill="url(#techGradient1)"/>
+    <circle cx="160" cy="100" r="3" fill="url(#techGradient1)"/>
+    <circle cx="100" cy="40" r="3" fill="url(#techGradient1)"/>
+    <circle cx="100" cy="160" r="3" fill="url(#techGradient1)"/>
+    
+    <!-- 魔法棒装饰 -->
+    <g transform="translate(170, 30)">
+      <line x1="0" y1="0" x2="0" y2="25" stroke="url(#techGradient1)" stroke-width="3"/>
+      <polygon points="0,0 6,6 0,12 -6,6" fill="url(#techGradient4)"/>
+    </g>
+    
+    <!-- 数据流装饰 -->
+    <g stroke="url(#techGradient3)" stroke-width="1" opacity="0.5">
+      <line x1="25" y1="25" x2="35" y2="35"/>
+      <line x1="165" y1="25" x2="175" y2="35"/>
+      <line x1="25" y1="175" x2="35" y2="165"/>
+      <line x1="165" y1="175" x2="175" y2="165"/>
+    </g>
+    
+    <!-- 中心点 -->
+    <circle cx="100" cy="100" r="8" fill="url(#techGradient4)" opacity="0.6"/>
+  </g>
+</svg> 

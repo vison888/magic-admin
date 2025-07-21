@@ -1,8 +1,12 @@
-import { userServiceUpdatePassword } from '@/services/auth/userService';
-import { getPassword } from '@/utils/password';
-import { ProFormInstance, ModalForm, ProFormText } from '@ant-design/pro-components';
+import {
+  ModalForm,
+  type ProFormInstance,
+  ProFormText,
+} from '@ant-design/pro-components';
 import { Button, message } from 'antd';
 import { useRef, useState } from 'react';
+import { userServiceUpdatePassword } from '@/services/auth/userService';
+import { getPassword } from '@/utils/password';
 
 const UpdatePassword: React.FC<{
   record?: API.protoUser;
@@ -18,7 +22,6 @@ const UpdatePassword: React.FC<{
   };
 
   const formSubmit = async (values: any) => {
-    const cur_password = values.cur_password as string;
     const new_password = values.new_password as string;
     const confirm_password = values.confirm_password as string;
     if (new_password !== confirm_password) {
@@ -27,7 +30,7 @@ const UpdatePassword: React.FC<{
     }
     const item: API.protoUpdatePasswordReq = {
       user_id: record?.id as string,
-      cur_password: getPassword(cur_password),
+      cur_password: '', // 管理员不需要原密码
       new_password: getPassword(new_password),
     };
     const res = await userServiceUpdatePassword(item);
@@ -63,20 +66,6 @@ const UpdatePassword: React.FC<{
       onFinish={formSubmit}
     >
       <ProFormText disabled name="nick_name" width="md" label="用户昵称" />
-      <ProFormText.Password
-        name="cur_password"
-        width="md"
-        label="原密码"
-        placeholder="请输入原密码"
-        fieldProps={{ autoComplete: 'off' }}
-        rules={[
-          {
-            required: true,
-            pattern: /^(?=.*\d)(?=.*[a-zA-Z]).{8,32}$/,
-            message: '密码必须包含字母和数字，长度在8-32位之间',
-          },
-        ]}
-      />
 
       <ProFormText.Password
         name="new_password"
