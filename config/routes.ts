@@ -53,61 +53,6 @@ export default [
     component: './WhiteList',
   },
   {
-    name: 'productIndex',
-    path: '/product',
-    component: './Product',
-  },
-  {
-    name: '产品详情',
-    hideInMenu: true,
-    path: '/product/detail/:id',
-    component: './Product/detail',
-  },
-  {
-    name: '属性新增或编辑',
-    hideInMenu: true,
-    path: '/product/detail/:id/property/:subid',
-    component: './Product/detail/AddOrUpdateProperty',
-  },
-  {
-    name: '事件新增或编辑',
-    hideInMenu: true,
-    path: '/product/detail/:id/event/:subid',
-    component: './Product/detail/AddOrUpdateEvent',
-  },
-  {
-    name: '服务新增或编辑',
-    hideInMenu: true,
-    path: '/product/detail/:id/service/:subid',
-    component: './Product/detail/AddOrUpdateService',
-  },
-  {
-    name: '设备详情',
-    hideInMenu: true,
-    path: '/device/detail/:id',
-    component: './Device/Detail',
-  },
-  {
-    name: 'deviceIndex',
-    path: '/device',
-    component: './Device',
-  },
-  {
-    name: 'notifyConfigIndex',
-    path: '/notify_config',
-    component: './NotifyConfig',
-  },
-  {
-    name: 'notifyTemplateIndex',
-    path: '/notify_tlp',
-    component: './NotifyTemplate',
-  },
-  {
-    name: 'notifyLogIndex',
-    path: '/notify_log',
-    component: './NotifyLog',
-  },
-  {
     path: '/welcome',
     name: 'welcome',
     icon: 'smile',

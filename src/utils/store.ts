@@ -1,4 +1,4 @@
-export const PREFIX = 'IOT_ENGINE';
+export const PREFIX = 'MAGIC_PLAT';
 export const getLocal = (key: string) => localStorage.getItem(key);
 export const setLocal = (key: string, data: string) => {
   localStorage.setItem(key, data);
@@ -23,20 +23,4 @@ export const setUserId = (userID: string) => {
 
 export const getUserId = () => {
   return localStorage.getItem(`${PREFIX}-userId`) ?? '';
-};
-
-export const setModelTabId = (tabId: string) => {
-  return localStorage.setItem(`${PREFIX}-modelTabId`, tabId);
-};
-
-export const getModelTabId = () => {
-  return localStorage.getItem(`${PREFIX}-modelTabId`) ?? "1";
-};
-
-export const setDeviceDetailTabId = (tabId: string) => {
-  return localStorage.setItem(`${PREFIX}-deviceDetailTabId`, tabId);
-};
-
-export const getDeviceDetailTabId = () => {
-  return localStorage.getItem(`${PREFIX}-deviceDetailTabId`) ?? "1";
 };
