@@ -2,11 +2,11 @@ import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { Button } from 'antd';
 import React, { useEffect, useRef } from 'react';
+import { userServiceDel, userServicePage } from '@/services/auth/userService';
+import AddOrUpdateUser from './components/AddOrUpdateUser';
 import useGetSelectRoles from '@/hooks/useGetSelectRoleOption';
 import useTableDelete from '@/hooks/useTableDelete';
-import { userServiceDel, userServicePage } from '@/services/auth/userService';
 import { timestampToDateStr } from '@/utils/date';
-import AddOrUpdateUser from './components/AddOrUpdateUser';
 import UpdatePassword from './components/UpdatePassword';
 
 const UserPage: React.FC = () => {
@@ -29,9 +29,7 @@ const UserPage: React.FC = () => {
   /**
    * 查询数据
    * */
-  const queryPage = async (
-    params: any,
-  ): Promise<{ data?: API.protoUser[]; total?: number }> => {
+  const queryPage = async (params: any): Promise<{ data?: API.protoUser[]; total?: number }> => {
     const body: API.protoUserPageReq = {
       page_index: params.current,
       page_size: params.pageSize,
@@ -70,8 +68,7 @@ const UserPage: React.FC = () => {
           roleNames = '';
           for (let index = 0; index < roles.length; index++) {
             const code = roles[index];
-            selectRoles.map[code] &&
-              (roleNames = selectRoles.map[code].label + ' ');
+            selectRoles.map[code] && (roleNames = selectRoles.map[code].label + ' ');
           }
         }
         return roleNames;
@@ -82,10 +79,7 @@ const UserPage: React.FC = () => {
       dataIndex: 'create_time',
       valueType: 'dateTime',
       render: (_, entity: API.protoUser) =>
-        timestampToDateStr(
-          Number(entity.create_time),
-          'YYYY-MM-DD HH:mm:ss.SSS',
-        ),
+        timestampToDateStr(Number(entity.create_time), 'YYYY-MM-DD HH:mm:ss.SSS'),
       search: false,
     },
     {
@@ -149,14 +143,7 @@ const UserPage: React.FC = () => {
           pageSize: 10,
         }}
         dateFormatter="string"
-        toolBarRender={() => [
-          <AddOrUpdateUser
-            flag="create"
-            pageRef={pageRef}
-            key="createUser"
-            selectOptions={selectRoles.list}
-          />,
-        ]}
+        toolBarRender={() => [<AddOrUpdateUser flag="create" pageRef={pageRef} key="createUser" selectOptions={selectRoles.list} />]}
       />
     </PageContainer>
   );

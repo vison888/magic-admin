@@ -27,7 +27,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
   const validateContact = (_: any, value: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^1[3-9]\d{9}$/;
-
+    
     if (emailRegex.test(value)) {
       return Promise.resolve();
     }

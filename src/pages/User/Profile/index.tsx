@@ -1,4 +1,8 @@
-import { CloseOutlined, SaveOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  CloseOutlined,
+  SaveOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 import { useModel } from '@umijs/max';
 import {
   Avatar,
@@ -99,34 +103,27 @@ const UserProfileDrawer: React.FC<UserProfileDrawerProps> = ({
       }}
     >
       {/* 头部 */}
-      <div
-        style={{
-          padding: '24px 24px 0 24px',
-          borderBottom: '1px solid #f0f0f0',
-          marginBottom: '24px',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Title level={4} style={{ margin: 0 }}>
-            个人信息
-          </Title>
+      <div style={{ 
+        padding: '24px 24px 0 24px',
+        borderBottom: '1px solid #f0f0f0',
+        marginBottom: '24px'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Title level={4} style={{ margin: 0 }}>个人信息</Title>
           <Button type="text" icon={<CloseOutlined />} onClick={onClose} />
         </div>
       </div>
 
       <div style={{ padding: '0 24px 24px 24px' }}>
         {/* 头像和基本信息 */}
-        <Card style={{ marginBottom: '24px' }} bodyStyle={{ padding: '24px' }}>
+        <Card 
+          style={{ marginBottom: '24px' }}
+          bodyStyle={{ padding: '24px' }}
+        >
           <div style={{ textAlign: 'center' }}>
-            <Avatar
-              size={80}
-              src={currentUser?.avatar}
+            <Avatar 
+              size={80} 
+              src={currentUser?.avatar} 
               icon={<UserOutlined />}
               style={{ marginBottom: '16px' }}
             />
@@ -139,11 +136,7 @@ const UserProfileDrawer: React.FC<UserProfileDrawerProps> = ({
 
         {/* 详细信息 */}
         <Card title="详细信息">
-          <Descriptions
-            column={1}
-            size="small"
-            style={{ marginBottom: '24px' }}
-          >
+          <Descriptions column={1} size="small" style={{ marginBottom: '24px' }}>
             <Descriptions.Item label="用户ID">
               <Text copyable>{currentUser?.userId}</Text>
             </Descriptions.Item>

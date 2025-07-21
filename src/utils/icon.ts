@@ -1,5 +1,5 @@
-import * as allIcons from '@ant-design/icons';
 import React from 'react';
+import * as allIcons from '@ant-design/icons';
 
 const fixMenuItemIcon = (icon: string): any => {
   if (!icon) {
@@ -13,22 +13,19 @@ const fixMenuItemIcon = (icon: string): any => {
     }
 
     // 尝试添加Outlined后缀
-    const outlinedIconName =
-      icon.slice(0, 1).toLocaleUpperCase() + icon.slice(1) + 'Outlined';
+    const outlinedIconName = icon.slice(0, 1).toLocaleUpperCase() + icon.slice(1) + "Outlined";
     if ((allIcons as any)[outlinedIconName]) {
       return React.createElement((allIcons as any)[outlinedIconName]);
     }
 
     // 尝试添加Filled后缀
-    const filledIconName =
-      icon.slice(0, 1).toLocaleUpperCase() + icon.slice(1) + 'Filled';
+    const filledIconName = icon.slice(0, 1).toLocaleUpperCase() + icon.slice(1) + "Filled";
     if ((allIcons as any)[filledIconName]) {
       return React.createElement((allIcons as any)[filledIconName]);
     }
 
     // 尝试添加TwoTone后缀
-    const twoToneIconName =
-      icon.slice(0, 1).toLocaleUpperCase() + icon.slice(1) + 'TwoTone';
+    const twoToneIconName = icon.slice(0, 1).toLocaleUpperCase() + icon.slice(1) + "TwoTone";
     if ((allIcons as any)[twoToneIconName]) {
       return React.createElement((allIcons as any)[twoToneIconName]);
     }

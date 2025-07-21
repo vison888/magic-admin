@@ -4,6 +4,7 @@ import { message } from 'antd';
 import { TOKENKEY } from '@/utils/const';
 import { getToken } from '@/utils/store';
 
+
 /**
  * @name 错误处理
  * pro 自带的错误处理， 可以在这里做自己的改动
@@ -32,16 +33,11 @@ export const errorConfig: RequestConfig = {
           setTimeout(() => {
             message.error(`请求错误 (${status}): ${data?.msg || '客户端错误'}`);
             // 备选方案：如果message不显示，使用alert
-            console.log(
-              '尝试显示错误消息:',
-              `请求错误 (${status}): ${data?.msg || '客户端错误'}`,
-            );
+            console.log('尝试显示错误消息:', `请求错误 (${status}): ${data?.msg || '客户端错误'}`);
           }, 100);
         } else if (status >= 500) {
           setTimeout(() => {
-            message.error(
-              `服务器错误 (${status}): ${data?.msg || '服务器内部错误'}`,
-            );
+            message.error(`服务器错误 (${status}): ${data?.msg || '服务器内部错误'}`);
           }, 100);
         } else {
           setTimeout(() => {

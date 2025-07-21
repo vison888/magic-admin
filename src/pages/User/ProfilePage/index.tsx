@@ -1,4 +1,7 @@
-import { SaveOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  SaveOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
 import { useModel } from '@umijs/max';
 import {
@@ -173,3 +176,4 @@ const ProfilePage: React.FC = () => {
 };
 
 export default ProfilePage;
+ 

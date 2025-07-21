@@ -106,7 +106,7 @@ const Login: React.FC = () => {
           {'登录页'}- {Settings.title}
         </title>
       </Helmet>
-
+      
       <div className="login-content">
         <div className="login-form-wrapper">
           <LoginForm
@@ -153,7 +153,7 @@ const Login: React.FC = () => {
                 },
               ]}
             />
-
+            
             <div
               style={{
                 marginBottom: 24,
@@ -180,7 +180,7 @@ const Login: React.FC = () => {
           </LoginForm>
         </div>
       </div>
-
+      
       <Footer />
       <ForgotPasswordModal
         visible={forgotPasswordVisible}

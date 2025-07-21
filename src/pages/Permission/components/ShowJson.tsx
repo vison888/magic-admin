@@ -1,4 +1,5 @@
-import { Button, Modal, Typography } from 'antd';
+
+import { Modal, Button, Typography } from 'antd';
 import { useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -31,7 +32,7 @@ const ShowJson: React.FC<{
       >
         查看详情
       </Button>
-
+      
       <Modal
         title={
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -48,23 +49,21 @@ const ShowJson: React.FC<{
         footer={[
           <Button key="close" onClick={onClose}>
             关闭
-          </Button>,
+          </Button>
         ]}
         width={800}
-        bodyStyle={{
-          maxHeight: '600px',
+        bodyStyle={{ 
+          maxHeight: '600px', 
           overflow: 'auto',
-          padding: '16px',
+          padding: '16px'
         }}
       >
-        <div
-          style={{
-            background: '#f8f9fa',
-            border: '1px solid #e9ecef',
-            borderRadius: '6px',
-            padding: '16px',
-          }}
-        >
+        <div style={{ 
+          background: '#f8f9fa', 
+          border: '1px solid #e9ecef',
+          borderRadius: '6px',
+          padding: '16px'
+        }}>
           <SyntaxHighlighter
             language="json"
             style={tomorrow}
@@ -72,7 +71,7 @@ const ShowJson: React.FC<{
               margin: 0,
               background: 'transparent',
               fontSize: '13px',
-              lineHeight: '1.5',
+              lineHeight: '1.5'
             }}
             showLineNumbers={true}
             wrapLines={true}

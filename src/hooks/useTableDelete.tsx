@@ -1,7 +1,6 @@
 import { ExclamationCircleOutlined } from '@ant-design/icons/lib/icons';
 import type { ActionType } from '@ant-design/pro-components';
-import { Modal, message } from 'antd';
-
+import { message, Modal } from 'antd';
 const { confirm } = Modal;
 const useTableDelete = () => {
   const deleteHandler = <T,>(
@@ -15,10 +14,10 @@ const useTableDelete = () => {
     deleteCancelHandler?: () => void,
   ) => {
     const { title, content, body } = deleteMap;
-
+    
     // 添加调试信息
     console.log('删除确认弹窗准备显示:', { title, content, body });
-
+    
     // 使用Ant Design Pro的Modal.confirm
     Modal.confirm({
       title,

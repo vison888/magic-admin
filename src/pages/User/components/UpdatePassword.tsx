@@ -1,12 +1,8 @@
-import {
-  ModalForm,
-  type ProFormInstance,
-  ProFormText,
-} from '@ant-design/pro-components';
-import { Button, message } from 'antd';
-import { useRef, useState } from 'react';
 import { userServiceUpdatePassword } from '@/services/auth/userService';
 import { getPassword } from '@/utils/password';
+import { ProFormInstance, ModalForm, ProFormText } from '@ant-design/pro-components';
+import { Button, message } from 'antd';
+import { useRef, useState } from 'react';
 
 const UpdatePassword: React.FC<{
   record?: API.protoUser;
@@ -66,7 +62,7 @@ const UpdatePassword: React.FC<{
       onFinish={formSubmit}
     >
       <ProFormText disabled name="nick_name" width="md" label="用户昵称" />
-
+      
       <ProFormText.Password
         name="new_password"
         width="md"

@@ -6,7 +6,6 @@ import { SettingDrawer } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from '@umijs/max';
 import { history } from '@umijs/max';
 import type { MenuDataItem } from '@umijs/route-utils';
-import { Modal } from 'antd';
 import React from 'react';
 import { AvatarDropdown, AvatarName, Footer } from '@/components';
 import { permissionServiceGetMenu } from '@/services/auth/permissionService';
@@ -16,6 +15,7 @@ import fixMenuItemIcon from '@/utils/icon';
 import { getToken, getUserId } from '@/utils/store';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
+import { Modal } from 'antd';
 
 // 配置Modal全局设置
 Modal.config({
@@ -128,7 +128,7 @@ export const layout: RunTimeLayoutConfig = ({
     //       const msg = await permissionServiceGetMenu({
     //         app_code: APPCODE,
     //       });
-
+        
     //       if (msg.code === 0 && msg.menu) {
     //         let menuData: MenuDataItem[] = JSON.parse(
     //           msg.menu as string,
@@ -185,7 +185,7 @@ export const layout: RunTimeLayoutConfig = ({
     //           ],
     //         },
     //       ];
-
+          
     //       // 处理默认菜单的图标
     //       const processMenuIcons = (menuItems: MenuDataItem[]): MenuDataItem[] => {
     //         return menuItems.map((item) => {
@@ -198,7 +198,7 @@ export const layout: RunTimeLayoutConfig = ({
     //           return item;
     //         });
     //       };
-
+          
     //       return processMenuIcons(defaultMenu);
     //     } catch (error) {
     //       console.error('获取菜单失败:', error);

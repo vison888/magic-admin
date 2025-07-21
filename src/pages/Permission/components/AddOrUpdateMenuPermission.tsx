@@ -129,10 +129,12 @@ const AddOrUpdateMenuPermission: React.FC<{
       dataIndex: 'content',
       render: (_, entity: API.protoResource) => {
         return (
-          <ShowJson
-            key={entity.id}
-            info={{ name: entity.name, content: entity.content }}
-          />
+          <>
+            <ShowJson
+              key={entity.id}
+              info={{ name: entity.name, content: entity.content }}
+            />
+          </>
         );
       },
     },
